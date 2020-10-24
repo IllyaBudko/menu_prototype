@@ -210,6 +210,12 @@ uint8_t update_humi[]  = {"45%"};
 uint8_t temp_integer = 23;
 uint8_t temp_decimal = 5;
 
+uint8_t humi_integer = 45;
+
+uint8_t time_hours = 10;
+uint8_t time_minutes = 30;
+
+
 uint8_t s_currentCLK;
 uint8_t s_lastCLK;
 
@@ -235,7 +241,7 @@ void Draw_main_display_p2(void)
     LCD_display_clear();
     LCD_set_cursor(0,0);
     LCD_send_string(l_time);
-    LCD_set_cursor(0,10);
+    LCD_set_cursor(0,9);
     LCD_send_string(time);
     LCD_set_cursor(1,0);
     LCD_send_string(l_date);
@@ -283,10 +289,7 @@ void Draw_settings_display(ctr)
 }
 
 void set_temp(void)
-{
-    uint8_t temp_integer = 23;
-    uint8_t temp_decimal = 5;
-    
+{    
     LCD_display_clear();
     
     LCD_set_cursor(0,0);
@@ -306,13 +309,13 @@ void set_temp(void)
                 if(temp_decimal == 10)
                 {
                     temp_decimal = 0;
-                    if(temp_integer < 100)
+                    if(temp_integer > 0)
                     {
-                        temp_integer += 1;
+                        temp_integer -= 1;
                     }
                     else
                     {
-                        temp_integer = 99;
+                        temp_integer = 0;
                     }
                 }
             }
@@ -322,13 +325,13 @@ void set_temp(void)
                 if(temp_decimal == 10)
                 {
                     temp_decimal = 0;
-                    if(temp_integer > 0)
+                    if(temp_integer < 100)
                     {
-                        temp_integer -= 1;
+                        temp_integer += 1;
                     }
                     else
                     {
-                        temp_integer = 0;
+                        temp_integer = 99;
                     }
                 }
             }
@@ -342,36 +345,148 @@ void set_temp(void)
 
 void set_humi(void)
 {
-    s_currentCLK = A;
-    if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
+    LCD_display_clear();
+    
+    LCD_set_cursor(0,0);
+    LCD_send_string(s_humi);
+    
+    LCD_set_cursor(0,13);
+    LCD_send_string(update_humi);
+    
+    while(!RA2)
     {
-        if(B != s_currentCLK)
+        s_currentCLK = A;
+        if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
         {
-
+            if(B != s_currentCLK)
+            {
+                if(humi_integer > 0)
+                {
+                    humi_integer -= 1;
+                }
+                else
+                {
+                    humi_integer = 0;
+                }
+            }
+            else
+            {
+                if(humi_integer < 100)
+                {
+                    humi_integer += 1;
+                }
+                else
+                {
+                    humi_integer = 99;
+                }
+            }
         }
-        else
-        {
-
-        }
+        s_lastCLK = s_currentCLK;
+        sprintf(update_humi,"%d%%",humi_integer);
+        LCD_set_cursor(0,13);
+        LCD_send_string(update_humi);
     }
-    s_lastCLK = s_currentCLK;
 }
 
 void set_time(void)
 {
-    s_currentCLK = A;
-    if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
+    uint8_t am_pm = {"PM"};
+    
+    LCD_display_clear();
+    
+    LCD_set_cursor(0,0);
+    LCD_send_string(s_time);
+    
+    LCD_set_cursor(0,9);
+    LCD_send_string(time);
+    while(!RA2)
     {
-        if(B != s_currentCLK)
+        s_currentCLK = A;
+        if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
         {
-
+            if(B != s_currentCLK)
+            {
+                if(time_hours > 1)
+                {
+                    time_hours -= 1;
+                }
+                else
+                {
+                    time_hours = 1;
+                }
+            }
+            else
+            {
+                if(time_hours < 12)
+                {
+                    time_hours += 1;
+                }
+                else
+                {
+                    time_hours = 12;
+                }
+            }
         }
-        else
-        {
-
-        }
+        s_lastCLK = s_currentCLK;
+        sprintf(time,"%d:%d[%s]",time_hours,time_minutes,am_pm);
+        LCD_set_cursor(0,9);
+        LCD_send_string(time);
     }
-    s_lastCLK = s_currentCLK;
+
+    while(RA2);
+    while(!RA2)
+    {
+        s_currentCLK = A;
+        if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
+        {
+            if(B != s_currentCLK)
+            {
+                if(time_minutes > 0)
+                {
+                    time_minutes -= 1;
+                }
+                else
+                {
+                    time_minutes = 0;
+                }
+            }
+            else
+            {
+                if(time_minutes < 59)
+                {
+                    time_minutes += 1;
+                }
+                else
+                {
+                    time_minutes = 59;
+                }
+            }
+        }
+        s_lastCLK = s_currentCLK;
+        sprintf(time,"%d:%d[%s]",time_hours,time_minutes,am_pm);
+        LCD_set_cursor(0,9);
+        LCD_send_string(time);
+    }
+    while(RA2);
+    while(!RA2)
+    {
+        s_currentCLK = A;
+        if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
+        {
+            if(B != s_currentCLK)
+            {
+                sprintf(am_pm,"AM");
+            }
+            else
+            {
+                sprintf(am_pm,"PM");
+            }
+        }
+        s_lastCLK = s_currentCLK;
+        sprintf(time,"%d:%d[%s]",time_hours,time_minutes,am_pm);
+        LCD_set_cursor(0,9);
+        LCD_send_string(time);
+    }
 }
 
 void set_date(void)
@@ -440,18 +555,6 @@ void main(void)
                     {
                         if (B != currentCLK)
                         {
-                            if(counter < 3)
-                            {
-                                counter++;
-                                Draw_settings_display(counter);
-                            }
-                            else
-                            {
-                                counter = 3;
-                            }			
-                        }
-                        else
-                        {
                             if(counter > 0)
                             {
                                 counter--;
@@ -460,6 +563,18 @@ void main(void)
                             else
                             {
                                 counter = 0;
+                            }			
+                        }
+                        else
+                        {
+                            if(counter < 3)
+                            {
+                                counter++;
+                                Draw_settings_display(counter);
+                            }
+                            else
+                            {
+                                counter = 3;
                             }
                         }
                     }
@@ -467,7 +582,7 @@ void main(void)
                     if(RA2)
                     {
                         TMR1ON = 1;
-                        while(RA2);
+                        while(RA2 && TMR1IF == 0);
                         if(TMR1IF == 0)
                         {
                             if(counter == 0)

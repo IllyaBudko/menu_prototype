@@ -362,9 +362,34 @@ sprintf(char * sp, const char * f, ...)
   case 'd':
   case 'i':
    break;
+# 754 "C:\\Program Files\\Microchip\\xc8\\v2.30\\pic\\sources\\c90\\common\\doprnt.c"
+  case 's':
+
+
+
+
+
+    cp = (*(const char * *)__va_arg((*(const char * **)ap), (const char *)0));
+
+
+
+
+
+   if(!cp)
+    cp = "(null)";
+# 803 "C:\\Program Files\\Microchip\\xc8\\v2.30\\pic\\sources\\c90\\common\\doprnt.c"
+   while(*cp)
+    ((*sp++ = (*cp++)));
+   continue;
 # 828 "C:\\Program Files\\Microchip\\xc8\\v2.30\\pic\\sources\\c90\\common\\doprnt.c"
   default:
-# 839 "C:\\Program Files\\Microchip\\xc8\\v2.30\\pic\\sources\\c90\\common\\doprnt.c"
+
+
+
+
+
+
+   ((*sp++ = (c)));
    continue;
 # 848 "C:\\Program Files\\Microchip\\xc8\\v2.30\\pic\\sources\\c90\\common\\doprnt.c"
   }
