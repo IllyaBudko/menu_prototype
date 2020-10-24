@@ -1866,42 +1866,40 @@ void Draw_main_display_p2(void)
     LCD_send_string(date);
 }
 
-void Draw_settings_display(void)
+void Draw_settings_display(ctr)
 {
-    switch(counter)
+    if(ctr == 0)
     {
-        case 0:
-            LCD_display_clear();
-            LCD_set_cursor(0,0);
-            LCD_send_string(s_time);
-            LCD_set_cursor(1,0);
-            LCD_send_string(s_date);
-            break;
-        case 1:
-            LCD_display_clear();
-            LCD_set_cursor(0,0);
-            LCD_send_string(s_date);
-            LCD_set_cursor(1,0);
-            LCD_send_string(s_temp);
-            break;
-        case 2:
-            LCD_display_clear();
-            LCD_set_cursor(0,0);
-            LCD_send_string(s_temp);
-            LCD_set_cursor(1,0);
-            LCD_send_string(s_humi);
-            break;
-        case 3:
-            LCD_display_clear();
-            LCD_set_cursor(0,0);
-            LCD_send_string(s_humi);
-            LCD_set_cursor(1,0);
-            LCD_send_string(s_time);
-            break;
+        LCD_display_clear();
+        LCD_set_cursor(0,0);
+        LCD_send_string(s_time);
+        LCD_set_cursor(1,0);
+        LCD_send_string(s_date);
     }
-
-
-
+    else if(ctr == 1)
+    {
+        LCD_display_clear();
+        LCD_set_cursor(0,0);
+        LCD_send_string(s_date);
+        LCD_set_cursor(1,0);
+        LCD_send_string(s_temp);
+    }
+    else if(ctr == 2)
+    {
+        LCD_display_clear();
+        LCD_set_cursor(0,0);
+        LCD_send_string(s_temp);
+        LCD_set_cursor(1,0);
+        LCD_send_string(s_humi);
+    }
+    else if(ctr ==3)
+    {
+        LCD_display_clear();
+        LCD_set_cursor(0,0);
+        LCD_send_string(s_humi);
+        LCD_set_cursor(1,0);
+        LCD_send_string(s_time);
+    }
 }
 
 
@@ -1947,8 +1945,7 @@ void main(void)
                 TMR1H = 0x00;
                 while(TMR1IF)
                 {
-                    Draw_settings_display();
-                    while(!RC4);
+                    Draw_settings_display(counter);
                     currentCLK = RC4;
                     if(currentCLK != lastCLK && currentCLK == 1)
                     {

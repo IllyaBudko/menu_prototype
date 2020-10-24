@@ -37,7 +37,7 @@
 [v _Draw_main_display_p2 Draw_main_display_p2 `(v  1 e 1 0 ]
 "252
 [v _Draw_settings_display Draw_settings_display `(v  1 e 1 0 ]
-"292
+"290
 [v _main main `(v  1 e 1 0 ]
 "167 C:\Program Files\Microchip\xc8\v2.30\pic\include\proc\pic16f688.h
 [v _PORTA PORTA `VEuc  1 e 1 @5 ]
@@ -132,14 +132,14 @@
 [v _update_humi update_humi `[4]uc  1 e 4 0 ]
 "221
 [v _counter counter `VEuc  1 e 1 0 ]
-"292
+"290
 [v _main main `(v  1 e 1 0 ]
 {
-"312
+"310
 [v main@currentCLK currentCLK `uc  1 a 1 5 ]
-"313
+"311
 [v main@lastCLK lastCLK `uc  1 a 1 4 ]
-"382
+"379
 } 0
 "103
 [v _LCD_display_ctrl LCD_display_ctrl `(v  1 e 1 0 ]
@@ -163,7 +163,8 @@
 "252
 [v _Draw_settings_display Draw_settings_display `(v  1 e 1 0 ]
 {
-"288
+[v Draw_settings_display@ctr ctr `i  1 p 2 0 ]
+"286
 } 0
 "239
 [v _Draw_main_display_p2 Draw_main_display_p2 `(v  1 e 1 0 ]
@@ -208,7 +209,7 @@
 [v _LCD_send_string LCD_send_string `(v  1 e 1 0 ]
 {
 "96
-[v LCD_send_string@i i `uc  1 a 1 0 ]
+[v LCD_send_string@i i `uc  1 a 1 11 ]
 "94
 [v LCD_send_string@string string `*.26uc  1 p 2 8 ]
 "101
