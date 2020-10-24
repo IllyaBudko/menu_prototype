@@ -31,9 +31,13 @@
 [v _LCD_display_clear LCD_display_clear `(v  1 e 1 0 ]
 "168
 [v _LCD_Init LCD_Init `(v  1 e 1 0 ]
-"215
-[v _Draw_main_display Draw_main_display `(v  1 e 1 0 ]
-"233
+"223
+[v _Draw_main_display_p1 Draw_main_display_p1 `(v  1 e 1 0 ]
+"239
+[v _Draw_main_display_p2 Draw_main_display_p2 `(v  1 e 1 0 ]
+"252
+[v _Draw_settings_display Draw_settings_display `(v  1 e 1 0 ]
+"292
 [v _main main `(v  1 e 1 0 ]
 "167 C:\Program Files\Microchip\xc8\v2.30\pic\include\proc\pic16f688.h
 [v _PORTA PORTA `VEuc  1 e 1 @5 ]
@@ -90,38 +94,52 @@
 [v _RC2 RC2 `VEb  1 e 0 @58 ]
 "2277
 [v _RC3 RC3 `VEb  1 e 0 @59 ]
+"2280
+[v _RC4 RC4 `VEb  1 e 0 @60 ]
+"2283
+[v _RC5 RC5 `VEb  1 e 0 @61 ]
 "2382
 [v _TMR1IF TMR1IF `VEb  1 e 0 @96 ]
 "2385
 [v _TMR1ON TMR1ON `VEb  1 e 0 @128 ]
 "203 C:\Users\Illya Budko\Documents\NetBeansProjects\Menu_prototype.X\main.c
-[v _l_time l_time `DC[5]uc  1 e 5 0 ]
+[v _s_time s_time `DC[5]uc  1 e 5 0 ]
 "204
-[v _l_date l_date `DC[5]uc  1 e 5 0 ]
+[v _s_date s_date `DC[5]uc  1 e 5 0 ]
 "205
-[v _l_temp l_temp `DC[5]uc  1 e 5 0 ]
+[v _s_temp s_temp `DC[12]uc  1 e 12 0 ]
 "206
-[v _l_humi l_humi `DC[5]uc  1 e 5 0 ]
+[v _s_humi s_humi `DC[9]uc  1 e 9 0 ]
 "208
-[v _time time `[8]uc  1 e 8 0 ]
+[v _l_time l_time `DC[5]uc  1 e 5 0 ]
 "209
-[v _date date `[9]uc  1 e 9 0 ]
+[v _l_date l_date `DC[5]uc  1 e 5 0 ]
 "210
-[v _current_temp current_temp `[5]uc  1 e 5 0 ]
+[v _l_temp l_temp `DC[5]uc  1 e 5 0 ]
 "211
-[v _current_humi current_humi `[4]uc  1 e 4 0 ]
-"212
-[v _update_temp update_temp `[5]uc  1 e 5 0 ]
+[v _l_humi l_humi `DC[5]uc  1 e 5 0 ]
 "213
+[v _time time `[8]uc  1 e 8 0 ]
+"214
+[v _date date `[9]uc  1 e 9 0 ]
+"215
+[v _current_temp current_temp `[5]uc  1 e 5 0 ]
+"216
+[v _current_humi current_humi `[4]uc  1 e 4 0 ]
+"217
+[v _update_temp update_temp `[5]uc  1 e 5 0 ]
+"218
 [v _update_humi update_humi `[4]uc  1 e 4 0 ]
-"233
+"221
+[v _counter counter `VEuc  1 e 1 0 ]
+"292
 [v _main main `(v  1 e 1 0 ]
 {
-"253
-[v main@string string `[6]uc  1 a 6 2 ]
-"252
-[v main@F831 F831 `[6]uc  1 s 6 F831 ]
-"289
+"312
+[v main@currentCLK currentCLK `uc  1 a 1 5 ]
+"313
+[v main@lastCLK lastCLK `uc  1 a 1 4 ]
+"382
 } 0
 "103
 [v _LCD_display_ctrl LCD_display_ctrl `(v  1 e 1 0 ]
@@ -137,6 +155,21 @@
 [v LCD_display_ctrl@display display `uc  1 a 1 7 ]
 "124
 } 0
+"168
+[v _LCD_Init LCD_Init `(v  1 e 1 0 ]
+{
+"201
+} 0
+"252
+[v _Draw_settings_display Draw_settings_display `(v  1 e 1 0 ]
+{
+"288
+} 0
+"239
+[v _Draw_main_display_p2 Draw_main_display_p2 `(v  1 e 1 0 ]
+{
+"250
+} 0
 "156
 [v _LCD_display_clear LCD_display_clear `(v  1 e 1 0 ]
 {
@@ -144,15 +177,10 @@
 [v LCD_display_clear@i i `uc  1 a 1 9 ]
 "164
 } 0
-"168
-[v _LCD_Init LCD_Init `(v  1 e 1 0 ]
+"223
+[v _Draw_main_display_p1 Draw_main_display_p1 `(v  1 e 1 0 ]
 {
-"201
-} 0
-"215
-[v _Draw_main_display Draw_main_display `(v  1 e 1 0 ]
-{
-"229
+"237
 } 0
 "142
 [v _LCD_set_cursor LCD_set_cursor `(v  1 e 1 0 ]
@@ -180,7 +208,7 @@
 [v _LCD_send_string LCD_send_string `(v  1 e 1 0 ]
 {
 "96
-[v LCD_send_string@i i `uc  1 a 1 11 ]
+[v LCD_send_string@i i `uc  1 a 1 0 ]
 "94
 [v LCD_send_string@string string `*.26uc  1 p 2 8 ]
 "101

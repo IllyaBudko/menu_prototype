@@ -1817,6 +1817,11 @@ void LCD_Init()
     __lcd_cmd(0x06);
 }
 
+const uint8_t s_time[] = {"Time"};
+const uint8_t s_date[] = {"Date"};
+const uint8_t s_temp[] = {"Temperature"};
+const uint8_t s_humi[] = {"Humidity"};
+
 const uint8_t l_time[] = {"Time"};
 const uint8_t l_date[] = {"Date"};
 const uint8_t l_temp[] = {"Temp"};
@@ -1829,7 +1834,10 @@ uint8_t current_humi[] = {"38%"};
 uint8_t update_temp[] = {"23.5"};
 uint8_t update_humi[] = {"45%"};
 
-void Draw_main_display(void)
+
+volatile uint8_t counter = 0;
+
+void Draw_main_display_p1(void)
 {
     LCD_send_string(l_temp);
     LCD_set_cursor(0,7);
@@ -1843,6 +1851,57 @@ void Draw_main_display(void)
     LCD_send_string(current_humi);
     __lcd_send_char(0x7E);
     LCD_send_string(update_humi);
+}
+
+void Draw_main_display_p2(void)
+{
+    LCD_display_clear();
+    LCD_set_cursor(0,0);
+    LCD_send_string(l_time);
+    LCD_set_cursor(0,10);
+    LCD_send_string(time);
+    LCD_set_cursor(1,0);
+    LCD_send_string(l_date);
+    LCD_set_cursor(1,8);
+    LCD_send_string(date);
+}
+
+void Draw_settings_display(void)
+{
+    switch(counter)
+    {
+        case 0:
+            LCD_display_clear();
+            LCD_set_cursor(0,0);
+            LCD_send_string(s_time);
+            LCD_set_cursor(1,0);
+            LCD_send_string(s_date);
+            break;
+        case 1:
+            LCD_display_clear();
+            LCD_set_cursor(0,0);
+            LCD_send_string(s_date);
+            LCD_set_cursor(1,0);
+            LCD_send_string(s_temp);
+            break;
+        case 2:
+            LCD_display_clear();
+            LCD_set_cursor(0,0);
+            LCD_send_string(s_temp);
+            LCD_set_cursor(1,0);
+            LCD_send_string(s_humi);
+            break;
+        case 3:
+            LCD_display_clear();
+            LCD_set_cursor(0,0);
+            LCD_send_string(s_humi);
+            LCD_set_cursor(1,0);
+            LCD_send_string(s_time);
+            break;
+    }
+
+
+
 }
 
 
@@ -1867,7 +1926,8 @@ void main(void)
     LCD_Init();
 
     LCD_display_ctrl(1,0,0);
-    uint8_t string[] = {"hello"};
+    uint8_t currentCLK;
+    uint8_t lastCLK;
     while(1)
     {
         while(RA2);
@@ -1875,29 +1935,62 @@ void main(void)
         TMR1L = 0x00;
         TMR1H = 0x00;
         TMR1IF = 0;
-        Draw_main_display();
+        Draw_main_display_p1();
         if(RA2)
         {
             T1CONbits.TMR1ON = 1;
             while(RA2);
             if(TMR1IF)
             {
-                LCD_display_clear();
-                LCD_send_string(string);
-                while(!RA2);
-                LCD_display_clear();
+                TMR1ON = 0;
+                TMR1L = 0x00;
+                TMR1H = 0x00;
+                while(TMR1IF)
+                {
+                    Draw_settings_display();
+                    while(!RC4);
+                    currentCLK = RC4;
+                    if(currentCLK != lastCLK && currentCLK == 1)
+                    {
+                        if (RC5 != currentCLK)
+                        {
+                            if(counter < 4)
+                            {
+                                counter++;
+                            }
+                            else
+                            {
+                                counter = 4;
+                            }
+                        }
+                        else
+                        {
+                            if(counter > 0)
+                            {
+                                counter--;
+                            }
+                            else
+                            {
+                                counter = 0;
+                            }
+                        }
+                    }
+                    lastCLK = currentCLK;
+                    if(RA2)
+                    {
+                        TMR1ON = 1;
+                        while(RA2);
+                        if(TMR1IF == 0)
+                        {
+
+                        }
+                    }
+                }
+
             }
             else
             {
-                LCD_display_clear();
-                LCD_set_cursor(0,0);
-                LCD_send_string(l_time);
-                LCD_set_cursor(0,10);
-                LCD_send_string(time);
-                LCD_set_cursor(1,0);
-                LCD_send_string(l_date);
-                LCD_set_cursor(1,8);
-                LCD_send_string(date);
+                Draw_main_display_p2();
                 while(!RA2);
                 LCD_display_clear();
             }
