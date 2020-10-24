@@ -1817,7 +1817,7 @@ uint8_t l_date[] = {"Date"};
 uint8_t l_temp[] = {"Temp"};
 uint8_t l_humi[] = {"Humi"};
 
-uint8_t time[] = {"12:00PM"};
+uint8_t time[] = {"24:00"};
 uint8_t date[] = {"30/07/92"};
 uint8_t current_temp[] = {"21.5"};
 uint8_t current_humi[] = {"38%"};
@@ -1829,8 +1829,8 @@ uint8_t temp_decimal = 5;
 
 uint8_t humi_integer = 45;
 
-uint8_t time_hours = 10;
-uint8_t time_minutes = 30;
+uint8_t time_hours = 24;
+uint8_t time_minutes = 00;
 
 
 uint8_t s_currentCLK;
@@ -1858,7 +1858,7 @@ void Draw_main_display_p2(void)
     LCD_display_clear();
     LCD_set_cursor(0,0);
     LCD_send_string(l_time);
-    LCD_set_cursor(0,9);
+    LCD_set_cursor(0,11);
     LCD_send_string(time);
     LCD_set_cursor(1,0);
     LCD_send_string(l_date);
@@ -2007,14 +2007,12 @@ void set_humi(void)
 
 void set_time(void)
 {
-    uint8_t am_pm = {"PM"};
-
     LCD_display_clear();
 
     LCD_set_cursor(0,0);
     LCD_send_string(s_time);
 
-    LCD_set_cursor(0,9);
+    LCD_set_cursor(0,11);
     LCD_send_string(time);
     while(!RA2)
     {
@@ -2023,30 +2021,30 @@ void set_time(void)
         {
             if(RC5 != s_currentCLK)
             {
-                if(time_hours > 1)
+                if(time_hours > 0)
                 {
                     time_hours -= 1;
                 }
                 else
                 {
-                    time_hours = 1;
+                    time_hours = 0;
                 }
             }
             else
             {
-                if(time_hours < 12)
+                if(time_hours < 24)
                 {
                     time_hours += 1;
                 }
                 else
                 {
-                    time_hours = 12;
+                    time_hours = 24;
                 }
             }
         }
         s_lastCLK = s_currentCLK;
-        sprintf(time,"%d:%d[%s]",time_hours,time_minutes,am_pm);
-        LCD_set_cursor(0,9);
+        sprintf(time,"%s%d:%s%d",(time_hours<10)?"0":"",time_hours,(time_minutes<10)?"0":"",time_minutes);
+        LCD_set_cursor(0,11);
         LCD_send_string(time);
     }
 
@@ -2080,28 +2078,8 @@ void set_time(void)
             }
         }
         s_lastCLK = s_currentCLK;
-        sprintf(time,"%d:%d[%s]",time_hours,time_minutes,am_pm);
-        LCD_set_cursor(0,9);
-        LCD_send_string(time);
-    }
-    while(RA2);
-    while(!RA2)
-    {
-        s_currentCLK = RC4;
-        if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
-        {
-            if(RC5 != s_currentCLK)
-            {
-                sprintf(am_pm,"AM");
-            }
-            else
-            {
-                sprintf(am_pm,"PM");
-            }
-        }
-        s_lastCLK = s_currentCLK;
-        sprintf(time,"%d:%d[%s]",time_hours,time_minutes,am_pm);
-        LCD_set_cursor(0,9);
+        sprintf(time,"%s%d:%s%d",(time_hours<10)?"0":"",time_hours,(time_minutes<10)?"0":"",time_minutes);
+        LCD_set_cursor(0,11 );
         LCD_send_string(time);
     }
 }

@@ -873,17 +873,15 @@ Version 4.0 HI-TECH Software Intermediate Code
 ..
 ]
 "203
-[; ;main.c: 203: uint8_t time[] = {"12:00PM"};
-[v _time `uc ~T0 @X0 -> 8 `i e ]
+[; ;main.c: 203: uint8_t time[] = {"24:00"};
+[v _time `uc ~T0 @X0 -> 6 `i e ]
 [i _time
 :U ..
--> 49 `c
 -> 50 `c
+-> 52 `c
 -> 58 `c
 -> 48 `c
 -> 48 `c
--> 80 `c
--> 77 `c
 -> 0 `c
 ..
 ]
@@ -968,16 +966,16 @@ Version 4.0 HI-TECH Software Intermediate Code
 -> -> 45 `i `uc
 ]
 "215
-[; ;main.c: 215: uint8_t time_hours = 10;
+[; ;main.c: 215: uint8_t time_hours = 24;
 [v _time_hours `uc ~T0 @X0 1 e ]
 [i _time_hours
--> -> 10 `i `uc
+-> -> 24 `i `uc
 ]
 "216
-[; ;main.c: 216: uint8_t time_minutes = 30;
+[; ;main.c: 216: uint8_t time_minutes = 00;
 [v _time_minutes `uc ~T0 @X0 1 e ]
 [i _time_minutes
--> -> 30 `i `uc
+-> -> 0 `i `uc
 ]
 "219
 [; ;main.c: 219: uint8_t s_currentCLK;
@@ -1054,8 +1052,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;main.c: 243:     LCD_send_string(l_time);
 [e ( _LCD_send_string (1 &U _l_time ]
 "244
-[; ;main.c: 244:     LCD_set_cursor(0,9);
-[e ( _LCD_set_cursor (2 , -> -> 0 `i `uc -> -> 9 `i `uc ]
+[; ;main.c: 244:     LCD_set_cursor(0,11);
+[e ( _LCD_set_cursor (2 , -> -> 0 `i `uc -> -> 11 `i `uc ]
 "245
 [; ;main.c: 245:     LCD_send_string(time);
 [e ( _LCD_send_string (1 &U _time ]
@@ -1529,762 +1527,689 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U _set_time ]
 [f ]
 "393
-[; ;main.c: 393:     uint8_t am_pm = {"PM"};
-[v _am_pm `uc ~T0 @X0 1 a ]
-[e = _am_pm -> :s 3C `uc ]
-"395
-[; ;main.c: 395:     LCD_display_clear();
+[; ;main.c: 393:     LCD_display_clear();
 [e ( _LCD_display_clear ..  ]
-"397
-[; ;main.c: 397:     LCD_set_cursor(0,0);
+"395
+[; ;main.c: 395:     LCD_set_cursor(0,0);
 [e ( _LCD_set_cursor (2 , -> -> 0 `i `uc -> -> 0 `i `uc ]
-"398
-[; ;main.c: 398:     LCD_send_string(s_time);
+"396
+[; ;main.c: 396:     LCD_send_string(s_time);
 [e ( _LCD_send_string (1 &U _s_time ]
-"400
-[; ;main.c: 400:     LCD_set_cursor(0,9);
-[e ( _LCD_set_cursor (2 , -> -> 0 `i `uc -> -> 9 `i `uc ]
-"401
-[; ;main.c: 401:     LCD_send_string(time);
+"398
+[; ;main.c: 398:     LCD_set_cursor(0,11);
+[e ( _LCD_set_cursor (2 , -> -> 0 `i `uc -> -> 11 `i `uc ]
+"399
+[; ;main.c: 399:     LCD_send_string(time);
 [e ( _LCD_send_string (1 &U _time ]
-"402
-[; ;main.c: 402:     while(!RA2)
+"400
+[; ;main.c: 400:     while(!RA2)
 [e $U 156  ]
 [e :U 157 ]
-"403
-[; ;main.c: 403:     {
+"401
+[; ;main.c: 401:     {
 {
-"404
-[; ;main.c: 404:         s_currentCLK = RC4;
+"402
+[; ;main.c: 402:         s_currentCLK = RC4;
 [e = _s_currentCLK -> _RC4 `uc ]
-"405
-[; ;main.c: 405:         if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
+"403
+[; ;main.c: 403:         if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
 [e $ ! && != -> _s_currentCLK `i -> _s_lastCLK `i == -> _s_currentCLK `i -> 1 `i 159  ]
+"404
+[; ;main.c: 404:         {
+{
+"405
+[; ;main.c: 405:             if(RC5 != s_currentCLK)
+[e $ ! != -> _RC5 `i -> _s_currentCLK `i 160  ]
 "406
-[; ;main.c: 406:         {
+[; ;main.c: 406:             {
 {
 "407
-[; ;main.c: 407:             if(RC5 != s_currentCLK)
-[e $ ! != -> _RC5 `i -> _s_currentCLK `i 160  ]
+[; ;main.c: 407:                 if(time_hours > 0)
+[e $ ! > -> _time_hours `i -> 0 `i 161  ]
 "408
-[; ;main.c: 408:             {
+[; ;main.c: 408:                 {
 {
 "409
-[; ;main.c: 409:                 if(time_hours > 1)
-[e $ ! > -> _time_hours `i -> 1 `i 161  ]
-"410
-[; ;main.c: 410:                 {
-{
-"411
-[; ;main.c: 411:                     time_hours -= 1;
+[; ;main.c: 409:                     time_hours -= 1;
 [e =- _time_hours -> -> 1 `i `uc ]
-"412
-[; ;main.c: 412:                 }
+"410
+[; ;main.c: 410:                 }
 }
 [e $U 162  ]
-"413
-[; ;main.c: 413:                 else
+"411
+[; ;main.c: 411:                 else
 [e :U 161 ]
-"414
-[; ;main.c: 414:                 {
+"412
+[; ;main.c: 412:                 {
 {
-"415
-[; ;main.c: 415:                     time_hours = 1;
-[e = _time_hours -> -> 1 `i `uc ]
-"416
-[; ;main.c: 416:                 }
+"413
+[; ;main.c: 413:                     time_hours = 0;
+[e = _time_hours -> -> 0 `i `uc ]
+"414
+[; ;main.c: 414:                 }
 }
 [e :U 162 ]
-"417
-[; ;main.c: 417:             }
+"415
+[; ;main.c: 415:             }
 }
 [e $U 163  ]
-"418
-[; ;main.c: 418:             else
+"416
+[; ;main.c: 416:             else
 [e :U 160 ]
+"417
+[; ;main.c: 417:             {
+{
+"418
+[; ;main.c: 418:                 if(time_hours < 24)
+[e $ ! < -> _time_hours `i -> 24 `i 164  ]
 "419
-[; ;main.c: 419:             {
+[; ;main.c: 419:                 {
 {
 "420
-[; ;main.c: 420:                 if(time_hours < 12)
-[e $ ! < -> _time_hours `i -> 12 `i 164  ]
-"421
-[; ;main.c: 421:                 {
-{
-"422
-[; ;main.c: 422:                     time_hours += 1;
+[; ;main.c: 420:                     time_hours += 1;
 [e =+ _time_hours -> -> 1 `i `uc ]
-"423
-[; ;main.c: 423:                 }
+"421
+[; ;main.c: 421:                 }
 }
 [e $U 165  ]
-"424
-[; ;main.c: 424:                 else
+"422
+[; ;main.c: 422:                 else
 [e :U 164 ]
-"425
-[; ;main.c: 425:                 {
+"423
+[; ;main.c: 423:                 {
 {
-"426
-[; ;main.c: 426:                     time_hours = 12;
-[e = _time_hours -> -> 12 `i `uc ]
-"427
-[; ;main.c: 427:                 }
+"424
+[; ;main.c: 424:                     time_hours = 24;
+[e = _time_hours -> -> 24 `i `uc ]
+"425
+[; ;main.c: 425:                 }
 }
 [e :U 165 ]
-"428
-[; ;main.c: 428:             }
+"426
+[; ;main.c: 426:             }
 }
 [e :U 163 ]
-"429
-[; ;main.c: 429:         }
+"427
+[; ;main.c: 427:         }
 }
 [e :U 159 ]
-"430
-[; ;main.c: 430:         s_lastCLK = s_currentCLK;
+"428
+[; ;main.c: 428:         s_lastCLK = s_currentCLK;
 [e = _s_lastCLK _s_currentCLK ]
+"429
+[; ;main.c: 429:         sprintf(time,"%s%d:%s%d",(time_hours<10)?"0":"",time_hours,(time_minutes<10)?"0":"",time_minutes);
+[e ( _sprintf (1 , , , , (. , -> &U _time `*uc :s 3C ? < -> _time_hours `i -> 10 `i : :s 4C :s 5C -> _time_hours `i ? < -> _time_minutes `i -> 10 `i : :s 6C :s 7C -> _time_minutes `i ]
+"430
+[; ;main.c: 430:         LCD_set_cursor(0,11);
+[e ( _LCD_set_cursor (2 , -> -> 0 `i `uc -> -> 11 `i `uc ]
 "431
-[; ;main.c: 431:         sprintf(time,"%d:%d[%s]",time_hours,time_minutes,am_pm);
-[e ( _sprintf (1 , , , (. , -> &U _time `*uc :s 4C -> _time_hours `i -> _time_minutes `i -> _am_pm `i ]
-"432
-[; ;main.c: 432:         LCD_set_cursor(0,9);
-[e ( _LCD_set_cursor (2 , -> -> 0 `i `uc -> -> 9 `i `uc ]
-"433
-[; ;main.c: 433:         LCD_send_string(time);
+[; ;main.c: 431:         LCD_send_string(time);
 [e ( _LCD_send_string (1 &U _time ]
-"434
-[; ;main.c: 434:     }
+"432
+[; ;main.c: 432:     }
 }
 [e :U 156 ]
-"402
-[; ;main.c: 402:     while(!RA2)
+"400
+[; ;main.c: 400:     while(!RA2)
 [e $ ! _RA2 157  ]
 [e :U 158 ]
-"436
-[; ;main.c: 436:     while(RA2);
+"434
+[; ;main.c: 434:     while(RA2);
 [e $U 166  ]
 [e :U 167 ]
 [e :U 166 ]
 [e $ _RA2 167  ]
 [e :U 168 ]
-"437
-[; ;main.c: 437:     while(!RA2)
+"435
+[; ;main.c: 435:     while(!RA2)
 [e $U 169  ]
 [e :U 170 ]
-"438
-[; ;main.c: 438:     {
+"436
+[; ;main.c: 436:     {
 {
-"439
-[; ;main.c: 439:         s_currentCLK = RC4;
+"437
+[; ;main.c: 437:         s_currentCLK = RC4;
 [e = _s_currentCLK -> _RC4 `uc ]
-"440
-[; ;main.c: 440:         if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
+"438
+[; ;main.c: 438:         if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
 [e $ ! && != -> _s_currentCLK `i -> _s_lastCLK `i == -> _s_currentCLK `i -> 1 `i 172  ]
+"439
+[; ;main.c: 439:         {
+{
+"440
+[; ;main.c: 440:             if(RC5 != s_currentCLK)
+[e $ ! != -> _RC5 `i -> _s_currentCLK `i 173  ]
 "441
-[; ;main.c: 441:         {
+[; ;main.c: 441:             {
 {
 "442
-[; ;main.c: 442:             if(RC5 != s_currentCLK)
-[e $ ! != -> _RC5 `i -> _s_currentCLK `i 173  ]
+[; ;main.c: 442:                 if(time_minutes > 0)
+[e $ ! > -> _time_minutes `i -> 0 `i 174  ]
 "443
-[; ;main.c: 443:             {
+[; ;main.c: 443:                 {
 {
 "444
-[; ;main.c: 444:                 if(time_minutes > 0)
-[e $ ! > -> _time_minutes `i -> 0 `i 174  ]
-"445
-[; ;main.c: 445:                 {
-{
-"446
-[; ;main.c: 446:                     time_minutes -= 1;
+[; ;main.c: 444:                     time_minutes -= 1;
 [e =- _time_minutes -> -> 1 `i `uc ]
-"447
-[; ;main.c: 447:                 }
+"445
+[; ;main.c: 445:                 }
 }
 [e $U 175  ]
-"448
-[; ;main.c: 448:                 else
+"446
+[; ;main.c: 446:                 else
 [e :U 174 ]
-"449
-[; ;main.c: 449:                 {
+"447
+[; ;main.c: 447:                 {
 {
-"450
-[; ;main.c: 450:                     time_minutes = 0;
+"448
+[; ;main.c: 448:                     time_minutes = 0;
 [e = _time_minutes -> -> 0 `i `uc ]
-"451
-[; ;main.c: 451:                 }
+"449
+[; ;main.c: 449:                 }
 }
 [e :U 175 ]
-"452
-[; ;main.c: 452:             }
+"450
+[; ;main.c: 450:             }
 }
 [e $U 176  ]
-"453
-[; ;main.c: 453:             else
+"451
+[; ;main.c: 451:             else
 [e :U 173 ]
+"452
+[; ;main.c: 452:             {
+{
+"453
+[; ;main.c: 453:                 if(time_minutes < 59)
+[e $ ! < -> _time_minutes `i -> 59 `i 177  ]
 "454
-[; ;main.c: 454:             {
+[; ;main.c: 454:                 {
 {
 "455
-[; ;main.c: 455:                 if(time_minutes < 59)
-[e $ ! < -> _time_minutes `i -> 59 `i 177  ]
-"456
-[; ;main.c: 456:                 {
-{
-"457
-[; ;main.c: 457:                     time_minutes += 1;
+[; ;main.c: 455:                     time_minutes += 1;
 [e =+ _time_minutes -> -> 1 `i `uc ]
-"458
-[; ;main.c: 458:                 }
+"456
+[; ;main.c: 456:                 }
 }
 [e $U 178  ]
-"459
-[; ;main.c: 459:                 else
+"457
+[; ;main.c: 457:                 else
 [e :U 177 ]
-"460
-[; ;main.c: 460:                 {
+"458
+[; ;main.c: 458:                 {
 {
-"461
-[; ;main.c: 461:                     time_minutes = 59;
+"459
+[; ;main.c: 459:                     time_minutes = 59;
 [e = _time_minutes -> -> 59 `i `uc ]
-"462
-[; ;main.c: 462:                 }
+"460
+[; ;main.c: 460:                 }
 }
 [e :U 178 ]
-"463
-[; ;main.c: 463:             }
+"461
+[; ;main.c: 461:             }
 }
 [e :U 176 ]
-"464
-[; ;main.c: 464:         }
+"462
+[; ;main.c: 462:         }
 }
 [e :U 172 ]
-"465
-[; ;main.c: 465:         s_lastCLK = s_currentCLK;
+"463
+[; ;main.c: 463:         s_lastCLK = s_currentCLK;
 [e = _s_lastCLK _s_currentCLK ]
+"464
+[; ;main.c: 464:         sprintf(time,"%s%d:%s%d",(time_hours<10)?"0":"",time_hours,(time_minutes<10)?"0":"",time_minutes);
+[e ( _sprintf (1 , , , , (. , -> &U _time `*uc :s 8C ? < -> _time_hours `i -> 10 `i : :s 9C :s 10C -> _time_hours `i ? < -> _time_minutes `i -> 10 `i : :s 11C :s 12C -> _time_minutes `i ]
+"465
+[; ;main.c: 465:         LCD_set_cursor(0,11 );
+[e ( _LCD_set_cursor (2 , -> -> 0 `i `uc -> -> 11 `i `uc ]
 "466
-[; ;main.c: 466:         sprintf(time,"%d:%d[%s]",time_hours,time_minutes,am_pm);
-[e ( _sprintf (1 , , , (. , -> &U _time `*uc :s 5C -> _time_hours `i -> _time_minutes `i -> _am_pm `i ]
-"467
-[; ;main.c: 467:         LCD_set_cursor(0,9);
-[e ( _LCD_set_cursor (2 , -> -> 0 `i `uc -> -> 9 `i `uc ]
-"468
-[; ;main.c: 468:         LCD_send_string(time);
+[; ;main.c: 466:         LCD_send_string(time);
 [e ( _LCD_send_string (1 &U _time ]
-"469
-[; ;main.c: 469:     }
+"467
+[; ;main.c: 467:     }
 }
 [e :U 169 ]
-"437
-[; ;main.c: 437:     while(!RA2)
+"435
+[; ;main.c: 435:     while(!RA2)
 [e $ ! _RA2 170  ]
 [e :U 171 ]
-"470
-[; ;main.c: 470:     while(RA2);
-[e $U 179  ]
-[e :U 180 ]
-[e :U 179 ]
-[e $ _RA2 180  ]
-[e :U 181 ]
-"471
-[; ;main.c: 471:     while(!RA2)
-[e $U 182  ]
-[e :U 183 ]
-"472
-[; ;main.c: 472:     {
-{
-"473
-[; ;main.c: 473:         s_currentCLK = RC4;
-[e = _s_currentCLK -> _RC4 `uc ]
-"474
-[; ;main.c: 474:         if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
-[e $ ! && != -> _s_currentCLK `i -> _s_lastCLK `i == -> _s_currentCLK `i -> 1 `i 185  ]
-"475
-[; ;main.c: 475:         {
-{
-"476
-[; ;main.c: 476:             if(RC5 != s_currentCLK)
-[e $ ! != -> _RC5 `i -> _s_currentCLK `i 186  ]
-"477
-[; ;main.c: 477:             {
-{
-"478
-[; ;main.c: 478:                 sprintf(am_pm,"AM");
-[e ( _sprintf (1 , -> _am_pm `*uc :s 6C ]
-"479
-[; ;main.c: 479:             }
-}
-[e $U 187  ]
-"480
-[; ;main.c: 480:             else
-[e :U 186 ]
-"481
-[; ;main.c: 481:             {
-{
-"482
-[; ;main.c: 482:                 sprintf(am_pm,"PM");
-[e ( _sprintf (1 , -> _am_pm `*uc :s 7C ]
-"483
-[; ;main.c: 483:             }
-}
-[e :U 187 ]
-"484
-[; ;main.c: 484:         }
-}
-[e :U 185 ]
-"485
-[; ;main.c: 485:         s_lastCLK = s_currentCLK;
-[e = _s_lastCLK _s_currentCLK ]
-"486
-[; ;main.c: 486:         sprintf(time,"%d:%d[%s]",time_hours,time_minutes,am_pm);
-[e ( _sprintf (1 , , , (. , -> &U _time `*uc :s 8C -> _time_hours `i -> _time_minutes `i -> _am_pm `i ]
-"487
-[; ;main.c: 487:         LCD_set_cursor(0,9);
-[e ( _LCD_set_cursor (2 , -> -> 0 `i `uc -> -> 9 `i `uc ]
-"488
-[; ;main.c: 488:         LCD_send_string(time);
-[e ( _LCD_send_string (1 &U _time ]
-"489
-[; ;main.c: 489:     }
-}
-[e :U 182 ]
-"471
-[; ;main.c: 471:     while(!RA2)
-[e $ ! _RA2 183  ]
-[e :U 184 ]
-"490
-[; ;main.c: 490: }
+"468
+[; ;main.c: 468: }
 [e :UE 155 ]
 }
-"492
-[; ;main.c: 492: void set_date(void)
+"470
+[; ;main.c: 470: void set_date(void)
 [v _set_date `(v ~T0 @X0 1 ef ]
-"493
-[; ;main.c: 493: {
+"471
+[; ;main.c: 471: {
 {
 [e :U _set_date ]
 [f ]
-"494
-[; ;main.c: 494:     s_currentCLK = RC4;
+"472
+[; ;main.c: 472:     s_currentCLK = RC4;
 [e = _s_currentCLK -> _RC4 `uc ]
-"495
-[; ;main.c: 495:     if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
-[e $ ! && != -> _s_currentCLK `i -> _s_lastCLK `i == -> _s_currentCLK `i -> 1 `i 189  ]
-"496
-[; ;main.c: 496:     {
+"473
+[; ;main.c: 473:     if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
+[e $ ! && != -> _s_currentCLK `i -> _s_lastCLK `i == -> _s_currentCLK `i -> 1 `i 180  ]
+"474
+[; ;main.c: 474:     {
 {
-"497
-[; ;main.c: 497:         if(RC5 != s_currentCLK)
-[e $ ! != -> _RC5 `i -> _s_currentCLK `i 190  ]
-"498
-[; ;main.c: 498:         {
+"475
+[; ;main.c: 475:         if(RC5 != s_currentCLK)
+[e $ ! != -> _RC5 `i -> _s_currentCLK `i 181  ]
+"476
+[; ;main.c: 476:         {
 {
-"500
-[; ;main.c: 500:         }
+"478
+[; ;main.c: 478:         }
 }
-[e $U 191  ]
-"501
-[; ;main.c: 501:         else
-[e :U 190 ]
-"502
-[; ;main.c: 502:         {
+[e $U 182  ]
+"479
+[; ;main.c: 479:         else
+[e :U 181 ]
+"480
+[; ;main.c: 480:         {
 {
-"504
-[; ;main.c: 504:         }
+"482
+[; ;main.c: 482:         }
 }
-[e :U 191 ]
-"505
-[; ;main.c: 505:     }
+[e :U 182 ]
+"483
+[; ;main.c: 483:     }
 }
-[e :U 189 ]
-"506
-[; ;main.c: 506:     s_lastCLK = s_currentCLK;
+[e :U 180 ]
+"484
+[; ;main.c: 484:     s_lastCLK = s_currentCLK;
 [e = _s_lastCLK _s_currentCLK ]
-"507
-[; ;main.c: 507: }
-[e :UE 188 ]
+"485
+[; ;main.c: 485: }
+[e :UE 179 ]
 }
 [v $root$_main `(v ~T0 @X0 0 e ]
-"510
-[; ;main.c: 510: void main(void)
+"488
+[; ;main.c: 488: void main(void)
 [v _main `(v ~T0 @X0 1 ef ]
-"511
-[; ;main.c: 511: {
+"489
+[; ;main.c: 489: {
 {
 [e :U _main ]
 [f ]
-"512
-[; ;main.c: 512:     ANSEL = 0x00;
+"490
+[; ;main.c: 490:     ANSEL = 0x00;
 [e = _ANSEL -> -> 0 `i `uc ]
-"513
-[; ;main.c: 513:     CMCON0 = 0x07;
+"491
+[; ;main.c: 491:     CMCON0 = 0x07;
 [e = _CMCON0 -> -> 7 `i `uc ]
-"515
-[; ;main.c: 515:     TRISA = 0x04;
+"493
+[; ;main.c: 493:     TRISA = 0x04;
 [e = _TRISA -> -> 4 `i `uc ]
-"516
-[; ;main.c: 516:     PORTA = 0x00;
+"494
+[; ;main.c: 494:     PORTA = 0x00;
 [e = _PORTA -> -> 0 `i `uc ]
-"518
-[; ;main.c: 518:     TRISC = 0x30;
+"496
+[; ;main.c: 496:     TRISC = 0x30;
 [e = _TRISC -> -> 48 `i `uc ]
-"519
-[; ;main.c: 519:     PORTC = 0x00;
+"497
+[; ;main.c: 497:     PORTC = 0x00;
 [e = _PORTC -> -> 0 `i `uc ]
-"521
-[; ;main.c: 521:     T1CONbits.TMR1ON = 0;
+"499
+[; ;main.c: 499:     T1CONbits.TMR1ON = 0;
 [e = . . _T1CONbits 0 0 -> -> 0 `i `uc ]
-"522
-[; ;main.c: 522:     TMR1L = 0x00;
+"500
+[; ;main.c: 500:     TMR1L = 0x00;
 [e = _TMR1L -> -> 0 `i `uc ]
-"523
-[; ;main.c: 523:     TMR1H = 0x00;
+"501
+[; ;main.c: 501:     TMR1H = 0x00;
 [e = _TMR1H -> -> 0 `i `uc ]
-"524
-[; ;main.c: 524:     T1CON = 0x30;
+"502
+[; ;main.c: 502:     T1CON = 0x30;
 [e = _T1CON -> -> 48 `i `uc ]
-"525
-[; ;main.c: 525:     TMR1IF = 0;
+"503
+[; ;main.c: 503:     TMR1IF = 0;
 [e = _TMR1IF -> -> 0 `i `b ]
-"527
-[; ;main.c: 527:     LCD_Init();
+"505
+[; ;main.c: 505:     LCD_Init();
 [e ( _LCD_Init ..  ]
-"529
-[; ;main.c: 529:     LCD_display_ctrl(1,0,0);
+"507
+[; ;main.c: 507:     LCD_display_ctrl(1,0,0);
 [e ( _LCD_display_ctrl (3 , , -> -> 1 `i `uc -> -> 0 `i `uc -> -> 0 `i `uc ]
-"530
-[; ;main.c: 530:     uint8_t currentCLK;
+"508
+[; ;main.c: 508:     uint8_t currentCLK;
 [v _currentCLK `uc ~T0 @X0 1 a ]
-"531
-[; ;main.c: 531:     uint8_t lastCLK;
+"509
+[; ;main.c: 509:     uint8_t lastCLK;
 [v _lastCLK `uc ~T0 @X0 1 a ]
-"533
-[; ;main.c: 533:     while(1)
-[e :U 194 ]
-"534
-[; ;main.c: 534:     {
+"511
+[; ;main.c: 511:     while(1)
+[e :U 185 ]
+"512
+[; ;main.c: 512:     {
 {
-"535
-[; ;main.c: 535:         while(RA2);
-[e $U 196  ]
-[e :U 197 ]
-[e :U 196 ]
-[e $ _RA2 197  ]
-[e :U 198 ]
-"536
-[; ;main.c: 536:         TMR1ON = 0;
+"513
+[; ;main.c: 513:         while(RA2);
+[e $U 187  ]
+[e :U 188 ]
+[e :U 187 ]
+[e $ _RA2 188  ]
+[e :U 189 ]
+"514
+[; ;main.c: 514:         TMR1ON = 0;
 [e = _TMR1ON -> -> 0 `i `b ]
-"537
-[; ;main.c: 537:         TMR1L = 0x00;
+"515
+[; ;main.c: 515:         TMR1L = 0x00;
 [e = _TMR1L -> -> 0 `i `uc ]
-"538
-[; ;main.c: 538:         TMR1H = 0x00;
+"516
+[; ;main.c: 516:         TMR1H = 0x00;
 [e = _TMR1H -> -> 0 `i `uc ]
-"539
-[; ;main.c: 539:         TMR1IF = 0;
+"517
+[; ;main.c: 517:         TMR1IF = 0;
 [e = _TMR1IF -> -> 0 `i `b ]
-"540
-[; ;main.c: 540:         Draw_main_display_p1();
+"518
+[; ;main.c: 518:         Draw_main_display_p1();
 [e ( _Draw_main_display_p1 ..  ]
+"519
+[; ;main.c: 519:         if(RA2)
+[e $ ! _RA2 190  ]
+"520
+[; ;main.c: 520:         {
+{
+"521
+[; ;main.c: 521:             T1CONbits.TMR1ON = 1;
+[e = . . _T1CONbits 0 0 -> -> 1 `i `uc ]
+"522
+[; ;main.c: 522:             while(RA2);
+[e $U 191  ]
+[e :U 192 ]
+[e :U 191 ]
+[e $ _RA2 192  ]
+[e :U 193 ]
+"523
+[; ;main.c: 523:             if(TMR1IF)
+[e $ ! _TMR1IF 194  ]
+"524
+[; ;main.c: 524:             {
+{
+"525
+[; ;main.c: 525:                 TMR1ON = 0;
+[e = _TMR1ON -> -> 0 `i `b ]
+"526
+[; ;main.c: 526:                 TMR1L = 0x00;
+[e = _TMR1L -> -> 0 `i `uc ]
+"527
+[; ;main.c: 527:                 TMR1H = 0x00;
+[e = _TMR1H -> -> 0 `i `uc ]
+"528
+[; ;main.c: 528:                 TMR1IF = 0;
+[e = _TMR1IF -> -> 0 `i `b ]
+"529
+[; ;main.c: 529:                 while(!TMR1IF)
+[e $U 195  ]
+[e :U 196 ]
+"530
+[; ;main.c: 530:                 {
+{
+"531
+[; ;main.c: 531:                     currentCLK = RC4;
+[e = _currentCLK -> _RC4 `uc ]
+"532
+[; ;main.c: 532:                     if(currentCLK != lastCLK && currentCLK == 1)
+[e $ ! && != -> _currentCLK `i -> _lastCLK `i == -> _currentCLK `i -> 1 `i 198  ]
+"533
+[; ;main.c: 533:                     {
+{
+"534
+[; ;main.c: 534:                         if (RC5 != currentCLK)
+[e $ ! != -> _RC5 `i -> _currentCLK `i 199  ]
+"535
+[; ;main.c: 535:                         {
+{
+"536
+[; ;main.c: 536:                             if(counter > 0)
+[e $ ! > -> _counter `i -> 0 `i 200  ]
+"537
+[; ;main.c: 537:                             {
+{
+"538
+[; ;main.c: 538:                                 counter--;
+[e -- _counter -> -> 1 `i `Vuc ]
+"539
+[; ;main.c: 539:                                 Draw_settings_display(counter);
+[e ( _Draw_settings_display (1 -> _counter `i ]
+"540
+[; ;main.c: 540:                             }
+}
+[e $U 201  ]
 "541
-[; ;main.c: 541:         if(RA2)
-[e $ ! _RA2 199  ]
+[; ;main.c: 541:                             else
+[e :U 200 ]
 "542
-[; ;main.c: 542:         {
+[; ;main.c: 542:                             {
 {
 "543
-[; ;main.c: 543:             T1CONbits.TMR1ON = 1;
-[e = . . _T1CONbits 0 0 -> -> 1 `i `uc ]
-"544
-[; ;main.c: 544:             while(RA2);
-[e $U 200  ]
-[e :U 201 ]
-[e :U 200 ]
-[e $ _RA2 201  ]
-[e :U 202 ]
-"545
-[; ;main.c: 545:             if(TMR1IF)
-[e $ ! _TMR1IF 203  ]
-"546
-[; ;main.c: 546:             {
-{
-"547
-[; ;main.c: 547:                 TMR1ON = 0;
-[e = _TMR1ON -> -> 0 `i `b ]
-"548
-[; ;main.c: 548:                 TMR1L = 0x00;
-[e = _TMR1L -> -> 0 `i `uc ]
-"549
-[; ;main.c: 549:                 TMR1H = 0x00;
-[e = _TMR1H -> -> 0 `i `uc ]
-"550
-[; ;main.c: 550:                 TMR1IF = 0;
-[e = _TMR1IF -> -> 0 `i `b ]
-"551
-[; ;main.c: 551:                 while(!TMR1IF)
-[e $U 204  ]
-[e :U 205 ]
-"552
-[; ;main.c: 552:                 {
-{
-"553
-[; ;main.c: 553:                     currentCLK = RC4;
-[e = _currentCLK -> _RC4 `uc ]
-"554
-[; ;main.c: 554:                     if(currentCLK != lastCLK && currentCLK == 1)
-[e $ ! && != -> _currentCLK `i -> _lastCLK `i == -> _currentCLK `i -> 1 `i 207  ]
-"555
-[; ;main.c: 555:                     {
-{
-"556
-[; ;main.c: 556:                         if (RC5 != currentCLK)
-[e $ ! != -> _RC5 `i -> _currentCLK `i 208  ]
-"557
-[; ;main.c: 557:                         {
-{
-"558
-[; ;main.c: 558:                             if(counter > 0)
-[e $ ! > -> _counter `i -> 0 `i 209  ]
-"559
-[; ;main.c: 559:                             {
-{
-"560
-[; ;main.c: 560:                                 counter--;
-[e -- _counter -> -> 1 `i `Vuc ]
-"561
-[; ;main.c: 561:                                 Draw_settings_display(counter);
-[e ( _Draw_settings_display (1 -> _counter `i ]
-"562
-[; ;main.c: 562:                             }
-}
-[e $U 210  ]
-"563
-[; ;main.c: 563:                             else
-[e :U 209 ]
-"564
-[; ;main.c: 564:                             {
-{
-"565
-[; ;main.c: 565:                                 counter = 0;
+[; ;main.c: 543:                                 counter = 0;
 [e = _counter -> -> 0 `i `uc ]
-"566
-[; ;main.c: 566:                             }
+"544
+[; ;main.c: 544:                             }
 }
-[e :U 210 ]
+[e :U 201 ]
+"545
+[; ;main.c: 545:                         }
+}
+[e $U 202  ]
+"546
+[; ;main.c: 546:                         else
+[e :U 199 ]
+"547
+[; ;main.c: 547:                         {
+{
+"548
+[; ;main.c: 548:                             if(counter < 3)
+[e $ ! < -> _counter `i -> 3 `i 203  ]
+"549
+[; ;main.c: 549:                             {
+{
+"550
+[; ;main.c: 550:                                 counter++;
+[e ++ _counter -> -> 1 `i `Vuc ]
+"551
+[; ;main.c: 551:                                 Draw_settings_display(counter);
+[e ( _Draw_settings_display (1 -> _counter `i ]
+"552
+[; ;main.c: 552:                             }
+}
+[e $U 204  ]
+"553
+[; ;main.c: 553:                             else
+[e :U 203 ]
+"554
+[; ;main.c: 554:                             {
+{
+"555
+[; ;main.c: 555:                                 counter = 3;
+[e = _counter -> -> 3 `i `uc ]
+"556
+[; ;main.c: 556:                             }
+}
+[e :U 204 ]
+"557
+[; ;main.c: 557:                         }
+}
+[e :U 202 ]
+"558
+[; ;main.c: 558:                     }
+}
+[e :U 198 ]
+"559
+[; ;main.c: 559:                     lastCLK = currentCLK;
+[e = _lastCLK _currentCLK ]
+"560
+[; ;main.c: 560:                     if(RA2)
+[e $ ! _RA2 205  ]
+"561
+[; ;main.c: 561:                     {
+{
+"562
+[; ;main.c: 562:                         TMR1ON = 1;
+[e = _TMR1ON -> -> 1 `i `b ]
+"563
+[; ;main.c: 563:                         while(RA2 && TMR1IF == 0);
+[e $U 206  ]
+[e :U 207 ]
+[e :U 206 ]
+[e $ && _RA2 == -> _TMR1IF `i -> 0 `i 207  ]
+[e :U 208 ]
+"564
+[; ;main.c: 564:                         if(TMR1IF == 0)
+[e $ ! == -> _TMR1IF `i -> 0 `i 209  ]
+"565
+[; ;main.c: 565:                         {
+{
+"566
+[; ;main.c: 566:                             if(counter == 0)
+[e $ ! == -> _counter `i -> 0 `i 210  ]
 "567
-[; ;main.c: 567:                         }
+[; ;main.c: 567:                             {
+{
+"568
+[; ;main.c: 568:                                 set_time();
+[e ( _set_time ..  ]
+"569
+[; ;main.c: 569:                             }
 }
 [e $U 211  ]
-"568
-[; ;main.c: 568:                         else
-[e :U 208 ]
-"569
-[; ;main.c: 569:                         {
-{
 "570
-[; ;main.c: 570:                             if(counter < 3)
-[e $ ! < -> _counter `i -> 3 `i 212  ]
+[; ;main.c: 570:                             else if(counter == 1)
+[e :U 210 ]
+[e $ ! == -> _counter `i -> 1 `i 212  ]
 "571
 [; ;main.c: 571:                             {
 {
 "572
-[; ;main.c: 572:                                 counter++;
-[e ++ _counter -> -> 1 `i `Vuc ]
+[; ;main.c: 572:                                 set_date();
+[e ( _set_date ..  ]
 "573
-[; ;main.c: 573:                                 Draw_settings_display(counter);
-[e ( _Draw_settings_display (1 -> _counter `i ]
-"574
-[; ;main.c: 574:                             }
+[; ;main.c: 573:                             }
 }
 [e $U 213  ]
-"575
-[; ;main.c: 575:                             else
+"574
+[; ;main.c: 574:                             else if(counter == 2)
 [e :U 212 ]
+[e $ ! == -> _counter `i -> 2 `i 214  ]
+"575
+[; ;main.c: 575:                             {
+{
 "576
-[; ;main.c: 576:                             {
-{
+[; ;main.c: 576:                                 set_temp();
+[e ( _set_temp ..  ]
 "577
-[; ;main.c: 577:                                 counter = 3;
-[e = _counter -> -> 3 `i `uc ]
-"578
-[; ;main.c: 578:                             }
+[; ;main.c: 577:                             }
 }
-[e :U 213 ]
-"579
-[; ;main.c: 579:                         }
-}
-[e :U 211 ]
-"580
-[; ;main.c: 580:                     }
-}
-[e :U 207 ]
-"581
-[; ;main.c: 581:                     lastCLK = currentCLK;
-[e = _lastCLK _currentCLK ]
-"582
-[; ;main.c: 582:                     if(RA2)
-[e $ ! _RA2 214  ]
-"583
-[; ;main.c: 583:                     {
-{
-"584
-[; ;main.c: 584:                         TMR1ON = 1;
-[e = _TMR1ON -> -> 1 `i `b ]
-"585
-[; ;main.c: 585:                         while(RA2 && TMR1IF == 0);
 [e $U 215  ]
+"578
+[; ;main.c: 578:                             else if(counter == 3)
+[e :U 214 ]
+[e $ ! == -> _counter `i -> 3 `i 216  ]
+"579
+[; ;main.c: 579:                             {
+{
+"580
+[; ;main.c: 580:                                 set_humi();
+[e ( _set_humi ..  ]
+"581
+[; ;main.c: 581:                             }
+}
 [e :U 216 ]
 [e :U 215 ]
-[e $ && _RA2 == -> _TMR1IF `i -> 0 `i 216  ]
-[e :U 217 ]
+[e :U 213 ]
+[e :U 211 ]
+"582
+[; ;main.c: 582:                         }
+}
+[e $U 217  ]
+"583
+[; ;main.c: 583:                         else
+[e :U 209 ]
+"584
+[; ;main.c: 584:                         {
+{
 "586
-[; ;main.c: 586:                         if(TMR1IF == 0)
-[e $ ! == -> _TMR1IF `i -> 0 `i 218  ]
+[; ;main.c: 586:                         }
+}
+[e :U 217 ]
 "587
-[; ;main.c: 587:                         {
-{
-"588
-[; ;main.c: 588:                             if(counter == 0)
-[e $ ! == -> _counter `i -> 0 `i 219  ]
-"589
-[; ;main.c: 589:                             {
-{
-"590
-[; ;main.c: 590:                                 set_time();
-[e ( _set_time ..  ]
-"591
-[; ;main.c: 591:                             }
-}
-[e $U 220  ]
-"592
-[; ;main.c: 592:                             else if(counter == 1)
-[e :U 219 ]
-[e $ ! == -> _counter `i -> 1 `i 221  ]
-"593
-[; ;main.c: 593:                             {
-{
-"594
-[; ;main.c: 594:                                 set_date();
-[e ( _set_date ..  ]
-"595
-[; ;main.c: 595:                             }
-}
-[e $U 222  ]
-"596
-[; ;main.c: 596:                             else if(counter == 2)
-[e :U 221 ]
-[e $ ! == -> _counter `i -> 2 `i 223  ]
-"597
-[; ;main.c: 597:                             {
-{
-"598
-[; ;main.c: 598:                                 set_temp();
-[e ( _set_temp ..  ]
-"599
-[; ;main.c: 599:                             }
-}
-[e $U 224  ]
-"600
-[; ;main.c: 600:                             else if(counter == 3)
-[e :U 223 ]
-[e $ ! == -> _counter `i -> 3 `i 225  ]
-"601
-[; ;main.c: 601:                             {
-{
-"602
-[; ;main.c: 602:                                 set_humi();
-[e ( _set_humi ..  ]
-"603
-[; ;main.c: 603:                             }
-}
-[e :U 225 ]
-[e :U 224 ]
-[e :U 222 ]
-[e :U 220 ]
-"604
-[; ;main.c: 604:                         }
-}
-[e $U 226  ]
-"605
-[; ;main.c: 605:                         else
-[e :U 218 ]
-"606
-[; ;main.c: 606:                         {
-{
-"608
-[; ;main.c: 608:                         }
-}
-[e :U 226 ]
-"609
-[; ;main.c: 609:                         TMR1ON = 0;
+[; ;main.c: 587:                         TMR1ON = 0;
 [e = _TMR1ON -> -> 0 `i `b ]
-"610
-[; ;main.c: 610:                         TMR1L = 0x00;
+"588
+[; ;main.c: 588:                         TMR1L = 0x00;
 [e = _TMR1L -> -> 0 `i `uc ]
-"611
-[; ;main.c: 611:                         TMR1H = 0x00;
+"589
+[; ;main.c: 589:                         TMR1H = 0x00;
 [e = _TMR1H -> -> 0 `i `uc ]
-"612
-[; ;main.c: 612:                     }
+"590
+[; ;main.c: 590:                     }
 }
-[e :U 214 ]
-"613
-[; ;main.c: 613:                 }
+[e :U 205 ]
+"591
+[; ;main.c: 591:                 }
 }
-[e :U 204 ]
-"551
-[; ;main.c: 551:                 while(!TMR1IF)
-[e $ ! _TMR1IF 205  ]
-[e :U 206 ]
-"614
-[; ;main.c: 614:                 LCD_display_clear();
-[e ( _LCD_display_clear ..  ]
-"615
-[; ;main.c: 615:             }
-}
-[e $U 227  ]
-"616
-[; ;main.c: 616:             else
-[e :U 203 ]
-"617
-[; ;main.c: 617:             {
-{
-"618
-[; ;main.c: 618:                 Draw_main_display_p2();
-[e ( _Draw_main_display_p2 ..  ]
-"619
-[; ;main.c: 619:                 while(!RA2);
-[e $U 228  ]
-[e :U 229 ]
-[e :U 228 ]
-[e $ ! _RA2 229  ]
-[e :U 230 ]
-"620
-[; ;main.c: 620:                 LCD_display_clear();
-[e ( _LCD_display_clear ..  ]
-"621
-[; ;main.c: 621:             }
-}
-[e :U 227 ]
-"622
-[; ;main.c: 622:         }
-}
-[e :U 199 ]
-"623
-[; ;main.c: 623:     }
-}
-[e :U 193 ]
-[e $U 194  ]
 [e :U 195 ]
-"624
-[; ;main.c: 624: }
-[e :UE 192 ]
+"529
+[; ;main.c: 529:                 while(!TMR1IF)
+[e $ ! _TMR1IF 196  ]
+[e :U 197 ]
+"592
+[; ;main.c: 592:                 LCD_display_clear();
+[e ( _LCD_display_clear ..  ]
+"593
+[; ;main.c: 593:             }
+}
+[e $U 218  ]
+"594
+[; ;main.c: 594:             else
+[e :U 194 ]
+"595
+[; ;main.c: 595:             {
+{
+"596
+[; ;main.c: 596:                 Draw_main_display_p2();
+[e ( _Draw_main_display_p2 ..  ]
+"597
+[; ;main.c: 597:                 while(!RA2);
+[e $U 219  ]
+[e :U 220 ]
+[e :U 219 ]
+[e $ ! _RA2 220  ]
+[e :U 221 ]
+"598
+[; ;main.c: 598:                 LCD_display_clear();
+[e ( _LCD_display_clear ..  ]
+"599
+[; ;main.c: 599:             }
+}
+[e :U 218 ]
+"600
+[; ;main.c: 600:         }
+}
+[e :U 190 ]
+"601
+[; ;main.c: 601:     }
+}
+[e :U 184 ]
+[e $U 185  ]
+[e :U 186 ]
+"602
+[; ;main.c: 602: }
+[e :UE 183 ]
 }
 [p f _sprintf 9699456 ]
+[a 3C 37 115 37 100 58 37 115 37 100 0 ]
+[a 8C 37 115 37 100 58 37 115 37 100 0 ]
 [a 1C 37 100 46 37 100 0 ]
-[a 4C 37 100 58 37 100 91 37 115 93 0 ]
-[a 5C 37 100 58 37 100 91 37 115 93 0 ]
-[a 8C 37 100 58 37 100 91 37 115 93 0 ]
-[a 3C 80 77 0 ]
-[a 7C 80 77 0 ]
-[a 6C 65 77 0 ]
+[a 4C 48 0 ]
+[a 6C 48 0 ]
+[a 9C 48 0 ]
+[a 11C 48 0 ]
 [a 2C 37 100 37 37 0 ]
+[a 5C 0 ]
+[a 7C 0 ]
+[a 10C 0 ]
+[a 12C 0 ]
