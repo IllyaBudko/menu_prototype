@@ -45,7 +45,6 @@ void __lcd_en_pulse(void)
     __delay_us(500);
     PORTAbits.E  = 0;
 }
-
 void __lcd_port_write(uint8_t data)
 {
     if(data & 0x01)
@@ -68,7 +67,6 @@ void __lcd_port_write(uint8_t data)
 	else
 		D7 = 0;
 }
-
 void __lcd_cmd(uint8_t cmd)
 {
     RS = 0;
@@ -90,7 +88,6 @@ void __lcd_send_char(uint8_t ascii)
     __lcd_port_write(low);
     __lcd_en_pulse();
 }
-
 void LCD_send_string(uint8_t string[])
 {
     uint8_t i = 0;
@@ -99,7 +96,6 @@ void LCD_send_string(uint8_t string[])
         __lcd_send_char(string[i]);
     }
 }
-
 void LCD_display_ctrl(uint8_t display, uint8_t cursor, uint8_t blink)
 {
     __lcd_cmd(0x00);
@@ -122,7 +118,6 @@ void LCD_display_ctrl(uint8_t display, uint8_t cursor, uint8_t blink)
         __lcd_cmd(0x08);
     }
 }
-
 void __lcd_shift_display(uint8_t LeftRight)
 {
     __lcd_cmd(0x01);
@@ -138,7 +133,6 @@ void __lcd_shift_display(uint8_t LeftRight)
         __lcd_cmd(temp);
     }
 }
-
 void LCD_set_cursor(uint8_t row, uint8_t column)
 {   
     if(row == 0)
@@ -152,7 +146,6 @@ void LCD_set_cursor(uint8_t row, uint8_t column)
     uint8_t temp = column;
     __lcd_cmd(temp);
 }
-
 void LCD_display_clear(void)
 {
     uint8_t i = 0;
@@ -162,9 +155,6 @@ void LCD_display_clear(void)
         __lcd_send_char(0x20);
     }
 }
-
-
-
 void LCD_Init()
 {
     __delay_ms(50);
@@ -200,15 +190,15 @@ void LCD_Init()
     __lcd_cmd(0x06);
 }
 
-const uint8_t s_time[] = {"Time"};
-const uint8_t s_date[] = {"Date"};
-const uint8_t s_temp[] = {"Temperature"};
-const uint8_t s_humi[] = {"Humidity"};
-
-const uint8_t l_time[] = {"Time"};
-const uint8_t l_date[] = {"Date"};
-const uint8_t l_temp[] = {"Temp"};
-const uint8_t l_humi[] = {"Humi"};
+uint8_t s_time[] = {"Time"};
+uint8_t s_date[] = {"Date"};
+uint8_t s_temp[] = {"Temperature"};
+uint8_t s_humi[] = {"Humidity"};
+uint8_t s_end[]  = {"----------------"};
+uint8_t l_time[] = {"Time"};
+uint8_t l_date[] = {"Date"};
+uint8_t l_temp[] = {"Temp"};
+uint8_t l_humi[] = {"Humi"};
 
 uint8_t time[]         = {"12:00PM"};
 uint8_t date[]         = {"30/07/92"};
@@ -217,6 +207,11 @@ uint8_t current_humi[] = {"38%"};
 uint8_t update_temp[]  = {"23.5"};
 uint8_t update_humi[]  = {"45%"};
 
+uint8_t temp_integer = 23;
+uint8_t temp_decimal = 5;
+
+uint8_t s_currentCLK;
+uint8_t s_lastCLK;
 
 volatile uint8_t counter = 0;
 
@@ -235,7 +230,6 @@ void Draw_main_display_p1(void)
     __lcd_send_char(0x7E);
     LCD_send_string(update_humi);
 }
-
 void Draw_main_display_p2(void)
 {
     LCD_display_clear();
@@ -248,13 +242,13 @@ void Draw_main_display_p2(void)
     LCD_set_cursor(1,8);
     LCD_send_string(date);
 }
-
 void Draw_settings_display(ctr)
 {
     if(ctr == 0)
     {
         LCD_display_clear();
         LCD_set_cursor(0,0);
+        __lcd_send_char(0x7E);
         LCD_send_string(s_time);
         LCD_set_cursor(1,0);
         LCD_send_string(s_date); 
@@ -263,6 +257,7 @@ void Draw_settings_display(ctr)
     {
         LCD_display_clear();
         LCD_set_cursor(0,0);
+        __lcd_send_char(0x7E);
         LCD_send_string(s_date);
         LCD_set_cursor(1,0);
         LCD_send_string(s_temp);
@@ -271,20 +266,130 @@ void Draw_settings_display(ctr)
     {
         LCD_display_clear();
         LCD_set_cursor(0,0);
+        __lcd_send_char(0x7E);
         LCD_send_string(s_temp);
         LCD_set_cursor(1,0);
         LCD_send_string(s_humi);
     }
-    else if(ctr ==3)
+    else if(ctr == 3)
     {
         LCD_display_clear();
         LCD_set_cursor(0,0);
+        __lcd_send_char(0x7E);
         LCD_send_string(s_humi);
         LCD_set_cursor(1,0);
-        LCD_send_string(s_time);
+        LCD_send_string(s_end);
     }
 }
 
+void set_temp(void)
+{
+    uint8_t temp_integer = 23;
+    uint8_t temp_decimal = 5;
+    
+    LCD_display_clear();
+    
+    LCD_set_cursor(0,0);
+    LCD_send_string(s_temp);
+    
+    LCD_set_cursor(0,12);
+    LCD_send_string(update_temp);
+    
+    while(!RA2)
+    {
+        s_currentCLK = A;
+        if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
+        {
+            if(B != s_currentCLK)
+            {
+                temp_decimal = temp_decimal + 5;
+                if(temp_decimal == 10)
+                {
+                    temp_decimal = 0;
+                    if(temp_integer < 100)
+                    {
+                        temp_integer += 1;
+                    }
+                    else
+                    {
+                        temp_integer = 99;
+                    }
+                }
+            }
+            else
+            {
+                temp_decimal = temp_decimal + 5;
+                if(temp_decimal == 10)
+                {
+                    temp_decimal = 0;
+                    if(temp_integer > 0)
+                    {
+                        temp_integer -= 1;
+                    }
+                    else
+                    {
+                        temp_integer = 0;
+                    }
+                }
+            }
+        }
+        s_lastCLK = s_currentCLK;
+        sprintf(update_temp,"%d.%d",temp_integer,temp_decimal);
+        LCD_set_cursor(0,12);
+        LCD_send_string(update_temp);
+    }
+}
+
+void set_humi(void)
+{
+    s_currentCLK = A;
+    if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
+    {
+        if(B != s_currentCLK)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
+    s_lastCLK = s_currentCLK;
+}
+
+void set_time(void)
+{
+    s_currentCLK = A;
+    if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
+    {
+        if(B != s_currentCLK)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
+    s_lastCLK = s_currentCLK;
+}
+
+void set_date(void)
+{
+    s_currentCLK = A;
+    if(s_currentCLK != s_lastCLK && s_currentCLK == 1)
+    {
+        if(B != s_currentCLK)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
+    s_lastCLK = s_currentCLK;
+}
 
 
 void main(void)
@@ -309,6 +414,7 @@ void main(void)
     LCD_display_ctrl(1,0,0);
     uint8_t currentCLK;
     uint8_t lastCLK;
+    
     while(1)
     {
         while(RA2);
@@ -326,21 +432,22 @@ void main(void)
                 TMR1ON = 0;
                 TMR1L = 0x00;
                 TMR1H = 0x00;
-                while(TMR1IF)
+                TMR1IF = 0;
+                while(!TMR1IF)
                 {
-                    Draw_settings_display(counter);
                     currentCLK = A;
                     if(currentCLK != lastCLK && currentCLK ==  1)
                     {
                         if (B != currentCLK)
                         {
-                            if(counter < 4)
+                            if(counter < 3)
                             {
                                 counter++;
+                                Draw_settings_display(counter);
                             }
                             else
                             {
-                                counter = 4;
+                                counter = 3;
                             }			
                         }
                         else
@@ -348,6 +455,7 @@ void main(void)
                             if(counter > 0)
                             {
                                 counter--;
+                                Draw_settings_display(counter);
                             }
                             else
                             {
@@ -362,11 +470,33 @@ void main(void)
                         while(RA2);
                         if(TMR1IF == 0)
                         {
+                            if(counter == 0)
+                            {
+                                set_time();
+                            }
+                            else if(counter == 1)
+                            {
+                                set_date();
+                            }
+                            else if(counter == 2)
+                            {
+                                set_temp();
+                            }
+                            else if(counter == 3)
+                            {
+                                set_humi();
+                            }
+                        } 
+                        else
+                        {
                             
-                        }             
+                        }
+                        TMR1ON = 0;
+                        TMR1L = 0x00;
+                        TMR1H = 0x00;
                     }
                 }
-                
+                LCD_display_clear();
             }
             else
             {
